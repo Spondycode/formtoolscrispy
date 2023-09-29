@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from formtools.wizard.views import SessionWizardView
 from core.forms import GuestDetailForm, BusinessDetailForm, BookingDetailForm
 
@@ -20,10 +21,11 @@ class BookingWizardView(SessionWizardView):
             guest = guest_form.save(commit=False)
             guest.business = business
             guest.save()
+            return redirect('/')
         else:
             guest = guest_form.save()
 
         booking = form_list[-1].save(commit=False)
         booking.guest = guest
         booking.save()
-        return HttpResponse("Form submitted!")
+        return redirect('/')
